@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Some Website</title>
+    <style>
+        .bold {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+{{> header}}
+<p>{{pageContent}}</p>
+
+<p>{{#bold}}Some text{{/bold}}</p>
+<p>{{#bold}}{{pageContent}}{{/bold}}</p>
+
+{{#list people}}
+    <a href="{{url}}">{{firstName}} {{lastName}}</a>
+{{/list}}
+
+{{> footer}}
+
+</body>
+</html>
