@@ -1,0 +1,51 @@
+{{> header}}
+<section id="main" class="mt-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-3">
+                {{#list cities}}
+                  <a class="list-group-item" href="/weather/{{url}}">{{city}}</a>
+                {{/list}}
+            </div>
+            <div class="col-12 col-md-9">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Country</th>
+                        <td>{{weather.sys.country}}</td>
+                    </tr>
+                    <tr>
+                        <th>City</th>
+                        <td>{{weather.name}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Weather</th>
+                        <td>{{weather.weatherDesc}}</td>
+                    </tr>
+                    <tr>
+                        <th>Coords</th>
+                        <td>{{weather.coord.lon}} {{weatherObj.coord.lat}}</td>
+                    </tr
+                    <tr>
+                        <th>Temperature</th>
+                        <td>{{weather.main.temp}} degrees Celsius</td>
+                    </tr>
+                    <tr>
+                        <th>Pressure</th>
+                        <td>{{weather.main.pressure}} mm Hg</td>
+                    </tr>
+                    <tr>
+                        <th>Humidity</th>
+                        <td>{{weather.main.humidity}} percent</td>
+                    </tr>
+                    <tr>
+                        <th>Wind Speed</th>
+                        <td>{{weatherObj.wind.speed}} percent</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{{> footer}}
+

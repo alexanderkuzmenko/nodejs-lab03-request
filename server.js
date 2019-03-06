@@ -1,5 +1,5 @@
 const express = require("express");
-
+const request = require("request");
 const hbs = require("hbs");
 const fs = require("fs");
 
@@ -11,7 +11,6 @@ app.set('view engine', 'hbs');
 app.use((req, res, next) => {
     let now = new Date().toString();
     let log = `${now}: ${req.method} ${req.url}`;
-    console.log(log);
     fs.appendFile('server.log', log + '\n', (err) => {
         if (err) {
             console.log('Unable to append to server.log');
@@ -21,8 +20,10 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-    res.render('maintenance.hbs');
+    //res.render('maintenance.hbs');
+    next();
 });
+
 app.use(express.static(__dirname + '/public'));
 
 
@@ -43,14 +44,16 @@ hbs.registerHelper('bold', function(options){
 });
 
 hbs.registerHelper('list', function(context, options) {
-    var ret = "<ul>";
+    var ret = "<div class='list-group'>";
     for(var i=0; i < context.length; i++) {
-        ret = ret + "<li>" + options.fn(context[i]) + "</li>";
+        ret = ret + options.fn(context[i]);
     }
-    return ret + "</ul>";
+    return ret + "</div>";
 });
 
 app.use(express.static(__dirname + '/public'));
+
+
 
 app.get('/', (req, res) => {
     res.render('home.hbs', {
@@ -104,6 +107,28 @@ app.get('/user', (req, res) => {
            'Cities'
        ]
    });
+});
+
+
+
+app.get('/weather/:city', (req, res) => {
+
+  let city = req.params.city;
+    let citiesJSON = fs.readFileSync("cities.json");
+    let cities = JSON.parse(citiesJSON);
+  request({
+      url: `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=b5018676b6c9e7d01aa7056fd2b9186d`
+  }, (err, request, body) => {
+        if (err) throw err;
+        let weatherObj = JSON.parse(body);
+        weatherObj.weatherDesc = weatherObj.weather[0].description;
+        console.log(weatherObj);
+        res.render('weather.hbs', {
+            weather: weatherObj,
+            cities: cities
+        });
+  });
+
 });
 
 app.listen(3000, () => {
